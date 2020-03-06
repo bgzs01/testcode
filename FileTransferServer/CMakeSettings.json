@@ -1,0 +1,60 @@
+{
+  "configurations": [
+    {
+      "name": "x64-Release",
+      "generator": "Ninja",
+      "configurationType": "RelWithDebInfo",
+      "inheritEnvironments": [
+        "msvc_x64_x64"
+      ],
+      "buildRoot": "${env.USERPROFILE}\\CMakeBuilds\\${workspaceHash}\\build\\${name}",
+      "installRoot": "${env.USERPROFILE}\\CMakeBuilds\\${workspaceHash}\\install\\${name}",
+      "cmakeCommandArgs": "",
+      "buildCommandArgs": "-v",
+      "ctestCommandArgs": ""
+    },
+    {
+      "name": "x64-Debug",
+      "generator": "Ninja",
+      "configurationType": "Debug",
+      "inheritEnvironments": [
+        "msvc_x64_x64"
+      ],
+      "buildRoot": "${env.USERPROFILE}\\CMakeBuilds\\${workspaceHash}\\build\\${name}",
+      "installRoot": "${env.USERPROFILE}\\CMakeBuilds\\${workspaceHash}\\install\\${name}",
+      "cmakeCommandArgs": "",
+      "buildCommandArgs": "-v",
+      "ctestCommandArgs": ""
+    },
+    {
+      "name": "Linux-Debug", //复制到远程工程文件夹目录名称，可以自定义。
+      "generator": "Unix Makefiles", //使cmake生成makefile
+      //"remoteMachineName": "${defaultRemoteMachineName}",
+      "remoteMachineName": "192.168.1.180", //刚刚添加的linux服务器地址
+      "configurationType": "Debug",
+      // "remoteCMakeListsRoot": "/var/tmp/src/${workspaceHash}/${name}",
+      "remoteCMakeListsRoot": "/home/zhao/code/remote/${name}", //copy到远程的这一路径，对于连接的用户，需要有这一路径的操作权限，如果没有权限，将会导致vs在远程创建此路径文件夹失败。
+      "cmakeExecutable": "/usr/local/bin/cmake", //远程cmake路径
+      "buildRoot": "${env.USERPROFILE}\\CMakeBuilds\\${workspaceHash}\\build\\${name}", //默认就好，也可以设置成本地工程所在的build目录
+      "installRoot": "${env.USERPROFILE}\\CMakeBuilds\\${workspaceHash}\\install\\${name}", //同上
+      "remoteBuildRoot": "/home/zhao/code/remote/${name}/build", //远程执行cmake构建的路径，建议就按我这个写，指定到远程工程目录下的build目录。
+      "remoteInstallRoot": "/home/zhao/code/remote/${name}/install", //远程cmake安装路径
+      "remoteCopySources": true,
+      "remoteCopySourcesOutputVerbosity": "Normal",
+      "remoteCopySourcesConcurrentCopies": "10",
+      "remoteCopySourcesMethod": "sftp", //此处建议使用sftp，另外一个总是出现字符编码不兼容的问题。
+      "remoteCopySourcesExclusionList": [ //忽略以下目录不copy到远程，可以将于编译无关的目录都添加上。
+        ".vs",
+        ".git"
+      ],
+      "rsyncCommandArgs": "-t --delete --delete-excluded",
+      "remoteCopyBuildOutput": false,
+      "cmakeCommandArgs": "",
+      "buildCommandArgs": "",
+      "ctestCommandArgs": "",
+      "inheritEnvironments": [
+        "linux_x64"
+      ]
+    }
+  ]
+}
