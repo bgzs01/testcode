@@ -3,6 +3,8 @@
 #
 cmake_minimum_required (VERSION 3.8)
 
+set(CMAKE_CXX_STANDARD 11)
+
 # 将源代码添加到此项目的可执行文件。
 add_executable (FileTransferClient "FileTransferClient.cpp" "FileTransferClient.h")
 
@@ -11,6 +13,13 @@ add_executable (FileTransferClient "FileTransferClient.cpp" "FileTransferClient.
 include_directories(/usr/local/include)
 LINK_DIRECTORIES(/usr/local/lib)
 target_link_libraries(FileTransferClient zmq)
+target_link_libraries(FileTransferClient event)
 
 find_package(Threads)
 target_link_libraries(FileTransferClient ${CMAKE_THREAD_LIBS_INIT})
+
+include_directories(./interface)
+target_link_libraries(FileTransferClient interface)
+
+# sub dir
+ADD_SUBDIRECTORY(interface)
