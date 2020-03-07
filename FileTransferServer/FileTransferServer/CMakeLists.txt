@@ -16,3 +16,7 @@ target_link_libraries(FileTransferServer event)
 
 find_package(Threads)
 target_link_libraries(FileTransferServer ${CMAKE_THREAD_LIBS_INIT})
+
+# sub dir
+add_executable(interface ${DIRSRCS})
+target_link_libraries(FileTransferServer interf)
