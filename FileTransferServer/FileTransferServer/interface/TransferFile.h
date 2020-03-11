@@ -25,6 +25,7 @@ class TransferFileIf {
   virtual bool UploadFile(const std::string& file_name, const std::string& file_data, const int64_t file_length) = 0;
   virtual bool isExistFile(const std::string& file_name) = 0;
   virtual void DownloadFile(std::string& _return, const std::string& file_name) = 0;
+  virtual void getFileList(std::vector<std::string> & _return) = 0;
 };
 
 class TransferFileIfFactory {
@@ -63,6 +64,9 @@ class TransferFileNull : virtual public TransferFileIf {
     return _return;
   }
   void DownloadFile(std::string& /* _return */, const std::string& /* file_name */) {
+    return;
+  }
+  void getFileList(std::vector<std::string> & /* _return */) {
     return;
   }
 };
@@ -393,6 +397,98 @@ class TransferFile_DownloadFile_presult {
 
 };
 
+
+class TransferFile_getFileList_args {
+ public:
+
+  TransferFile_getFileList_args(const TransferFile_getFileList_args&);
+  TransferFile_getFileList_args& operator=(const TransferFile_getFileList_args&);
+  TransferFile_getFileList_args() {
+  }
+
+  virtual ~TransferFile_getFileList_args() noexcept;
+
+  bool operator == (const TransferFile_getFileList_args & /* rhs */) const
+  {
+    return true;
+  }
+  bool operator != (const TransferFile_getFileList_args &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const TransferFile_getFileList_args & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+
+class TransferFile_getFileList_pargs {
+ public:
+
+
+  virtual ~TransferFile_getFileList_pargs() noexcept;
+
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+typedef struct _TransferFile_getFileList_result__isset {
+  _TransferFile_getFileList_result__isset() : success(false) {}
+  bool success :1;
+} _TransferFile_getFileList_result__isset;
+
+class TransferFile_getFileList_result {
+ public:
+
+  TransferFile_getFileList_result(const TransferFile_getFileList_result&);
+  TransferFile_getFileList_result& operator=(const TransferFile_getFileList_result&);
+  TransferFile_getFileList_result() {
+  }
+
+  virtual ~TransferFile_getFileList_result() noexcept;
+  std::vector<std::string>  success;
+
+  _TransferFile_getFileList_result__isset __isset;
+
+  void __set_success(const std::vector<std::string> & val);
+
+  bool operator == (const TransferFile_getFileList_result & rhs) const
+  {
+    if (!(success == rhs.success))
+      return false;
+    return true;
+  }
+  bool operator != (const TransferFile_getFileList_result &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const TransferFile_getFileList_result & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+typedef struct _TransferFile_getFileList_presult__isset {
+  _TransferFile_getFileList_presult__isset() : success(false) {}
+  bool success :1;
+} _TransferFile_getFileList_presult__isset;
+
+class TransferFile_getFileList_presult {
+ public:
+
+
+  virtual ~TransferFile_getFileList_presult() noexcept;
+  std::vector<std::string> * success;
+
+  _TransferFile_getFileList_presult__isset __isset;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+
+};
+
 class TransferFileClient : virtual public TransferFileIf {
  public:
   TransferFileClient(std::shared_ptr< ::apache::thrift::protocol::TProtocol> prot) {
@@ -427,6 +523,9 @@ class TransferFileClient : virtual public TransferFileIf {
   void DownloadFile(std::string& _return, const std::string& file_name);
   void send_DownloadFile(const std::string& file_name);
   void recv_DownloadFile(std::string& _return);
+  void getFileList(std::vector<std::string> & _return);
+  void send_getFileList();
+  void recv_getFileList(std::vector<std::string> & _return);
  protected:
   std::shared_ptr< ::apache::thrift::protocol::TProtocol> piprot_;
   std::shared_ptr< ::apache::thrift::protocol::TProtocol> poprot_;
@@ -445,12 +544,14 @@ class TransferFileProcessor : public ::apache::thrift::TDispatchProcessor {
   void process_UploadFile(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_isExistFile(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_DownloadFile(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
+  void process_getFileList(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
  public:
   TransferFileProcessor(::std::shared_ptr<TransferFileIf> iface) :
     iface_(iface) {
     processMap_["UploadFile"] = &TransferFileProcessor::process_UploadFile;
     processMap_["isExistFile"] = &TransferFileProcessor::process_isExistFile;
     processMap_["DownloadFile"] = &TransferFileProcessor::process_DownloadFile;
+    processMap_["getFileList"] = &TransferFileProcessor::process_getFileList;
   }
 
   virtual ~TransferFileProcessor() {}
@@ -507,6 +608,16 @@ class TransferFileMultiface : virtual public TransferFileIf {
     return;
   }
 
+  void getFileList(std::vector<std::string> & _return) {
+    size_t sz = ifaces_.size();
+    size_t i = 0;
+    for (; i < (sz - 1); ++i) {
+      ifaces_[i]->getFileList(_return);
+    }
+    ifaces_[i]->getFileList(_return);
+    return;
+  }
+
 };
 
 // The 'concurrent' client is a thread safe client that correctly handles
@@ -548,6 +659,9 @@ class TransferFileConcurrentClient : virtual public TransferFileIf {
   void DownloadFile(std::string& _return, const std::string& file_name);
   int32_t send_DownloadFile(const std::string& file_name);
   void recv_DownloadFile(std::string& _return, const int32_t seqid);
+  void getFileList(std::vector<std::string> & _return);
+  int32_t send_getFileList();
+  void recv_getFileList(std::vector<std::string> & _return, const int32_t seqid);
  protected:
   std::shared_ptr< ::apache::thrift::protocol::TProtocol> piprot_;
   std::shared_ptr< ::apache::thrift::protocol::TProtocol> poprot_;
