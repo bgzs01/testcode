@@ -22,5 +22,17 @@ target_link_libraries(FileTransferServer ${CMAKE_THREAD_LIBS_INIT})
 include_directories(./interface)
 target_link_libraries(FileTransferServer interface)
 
+include_directories(./db)
+target_link_libraries(FileTransferServer db)
+
+include_directories(./Server)
+target_link_libraries(FileTransferServer Server)
+
+include_directories(./protocol)
+target_link_libraries(FileTransferServer protocol)
+
 # sub dir
 ADD_SUBDIRECTORY(interface)
+ADD_SUBDIRECTORY(db)
+ADD_SUBDIRECTORY(Server)
+ADD_SUBDIRECTORY(protocol)

@@ -9,5 +9,7 @@ public:
 	bool UploadFile(const std::string& file_name, const std::string& file_data, const int64_t file_length);
 	bool isExistFile(const std::string& file_name);
 	void DownloadFile(std::string& _return, const std::string& file_name);
+	void getFileList(std::vector<std::string> & _return);
+
 
 };

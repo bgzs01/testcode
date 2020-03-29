@@ -7,6 +7,9 @@
 #include <unistd.h>
 #include <string>
 #include <utility>
+#include <vector>
+#include <algorithm>
+#include "redisdb.h"
 
 TransferFileServer::TransferFileServer()
 {
@@ -16,26 +19,31 @@ TransferFileServer::TransferFileServer()
 bool TransferFileServer::UploadFile(const std::string& file_name, const std::string& file_data, const int64_t file_length)
 {
 	// Your implementation goes here
-	printf("UploadFile\n");
+	printf("in UploadFile\n");
 	return true;
 }
 
 bool TransferFileServer::isExistFile(const std::string& file_name) {
 	// Your implementation goes here
-	printf("isExistFile\n");
-	if (file_name == "mysql.tar" || file_name == "qt.tar")
+	printf("in isExistFile\n");
+
+	std::vector<std::string> fileNames;
+	RedisOp::getInstance().getFileList(fileNames);
+
+	auto it = find(fileNames.begin(), fileNames.end(), file_name);
+
+	if (it != fileNames.end())
 	{
 		return true;
-	}
-	else
-	{
+	} 
+	else{
 		return false;
 	}
 }
 
 void TransferFileServer::DownloadFile(std::string& _return, const std::string& file_name) {
 	// Your implementation goes here
-	printf("DownloadFile\n");
+	printf("in DownloadFile\n");
 
 	if (!isExistFile(file_name))
 	{
@@ -69,4 +77,10 @@ void TransferFileServer::DownloadFile(std::string& _return, const std::string& f
 
 	_return = std::move(std::string(buf, fileSize));
 	
+}
+
+void TransferFileServer::getFileList(std::vector<std::string>& _return)
+{
+	RedisOp::getInstance().getFileList(_return);
+	printf("getFileList\n");
 }

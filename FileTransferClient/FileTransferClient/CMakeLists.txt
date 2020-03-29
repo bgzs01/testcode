@@ -20,6 +20,17 @@ target_link_libraries(FileTransferClient ${CMAKE_THREAD_LIBS_INIT})
 
 include_directories(./interface)
 target_link_libraries(FileTransferClient interface)
-
-# sub dir
 ADD_SUBDIRECTORY(interface)
+
+include_directories(./protocol)
+target_link_libraries(FileTransferClient protocol)
+ADD_SUBDIRECTORY(protocol)
+
+include_directories(./client)
+target_link_libraries(FileTransferClient client)
+ADD_SUBDIRECTORY(client)
+
+target_link_libraries(FileTransferClient boost_filesystem)
+TARGET_LINK_LIBRARIES(FileTransferClient boost_date_time)
+TARGET_LINK_LIBRARIES(FileTransferClient boost_regex)
+TARGET_LINK_LIBRARIES(FileTransferClient boost_system)
